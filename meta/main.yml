@@ -1,0 +1,14 @@
+galaxy_info:
+  author: Dmitrii Kashin
+  description: create a script performing mysql backups
+  company: Noname
+  license: MIT
+  min_ansible_version: 2.7
+  platforms:
+  - name: Ubuntu
+    versions:
+    - 18.04
+
+  galaxy_tags: [ mysql, backup, aws, s3, slack ]
+
+dependencies: []
