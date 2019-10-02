@@ -1,4 +1,4 @@
-freehck.mysql_backup
+freehck.script_mysql_backup
 =========
 
 This role creates a script that performs mysql backups.
@@ -102,7 +102,7 @@ Example Playbook
 ----------------
 
     # create mysql backup job script
-    - role: freehck.mysql_backup
+    - role: freehck.script_mysql_backup
       # mysql connection parameters
       mysql_backup_host: "{{ db_host }}"
       mysql_backup_user: "{{ db_user }}"
