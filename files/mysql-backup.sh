@@ -308,7 +308,7 @@ password = $MYSQL_PASS
 host = $MYSQL_HOST
 port = $MYSQL_PORT
 EOF
-  $MYSQLDUMP --defaults-extra-file=mysql.conf $MYSQL_DB > $bkp
+  $MYSQLDUMP --defaults-file=mysql.conf $MYSQL_DB > $bkp
   msg ok
   
   if [ "$BKP_GZIP" = "yes" ]; then
