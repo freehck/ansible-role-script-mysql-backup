@@ -299,7 +299,6 @@ trap "rm -rf $bkpd;" err int exit
   slack "Start mysql backup"
   msg "Start mysql backup: $(date +%F-%T)"
 
-  msg -n "Dump database... "
   bkp="$BKP_PREFIX-$tstamp.sql"
   cat >mysql.conf <<EOF
 [client]
@@ -308,15 +307,16 @@ password = $MYSQL_PASS
 host = $MYSQL_HOST
 port = $MYSQL_PORT
 EOF
-  $MYSQLDUMP --defaults-file=mysql.conf $MYSQL_DB > $bkp
-  msg ok
-  
+
   if [ "$BKP_GZIP" = "yes" ]; then
-      msg -n "Gzip dump... "
-      gzip "$bkp"
+      msg -n "Dump database and gzip it... "
       bkp="$bkp.gz"
-      msg ok
+      $MYSQLDUMP --defaults-file=mysql.conf --single-transaction --quick $MYSQL_DB | gzip -c > $bkp
+  else
+      msg -n "Dump database... "
+      $MYSQLDUMP --defaults-file=mysql.conf --single-transaction --quick $MYSQL_DB > $bkp
   fi
+  msg ok
 
   if [ "$BKP_ENCRYPT_AES" = "yes" ]; then
       msg -n "Encrypt dump with aes256 algorithm... "
@@ -326,16 +326,16 @@ EOF
       msg ok
   fi
 
-  if [ "$S3_STORAGE" = "yes" ]; then
-      msg -n "Copy backup file to S3 storage... "
-      $S3CMD -c "$S3_CFG" put "$bkp" "s3://$S3_BUCKET" &>/dev/null
-      msg ok
-  fi
-
   if [ "$SCP_STORAGE" = "yes" ]; then
       msg -n "Copy backup file via SSH to $SCP_HOST..."
       $SSH -i "$SCP_IDENTITY" $SCP_USER@$SCP_HOST mkdir -p $SCP_DST
       $SCP -i "$SCP_IDENTITY" $bkp $SCP_USER@$SCP_HOST:$SCP_DST/$bkp >/dev/null
+      msg ok
+  fi
+
+  if [ "$S3_STORAGE" = "yes" ]; then
+      msg -n "Copy backup file to S3 storage... "
+      $S3CMD -c "$S3_CFG" put "$bkp" "s3://$S3_BUCKET" &>/dev/null
       msg ok
   fi
 
