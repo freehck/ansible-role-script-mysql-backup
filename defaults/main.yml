@@ -40,6 +40,7 @@ mysql_backup_archive_prefix: "{{ mysql_backup_db }}"
 mysql_backup_archive_stamp: "%F-%Hh%Mm%Ss"
 
 mysql_backup_warn_size: "0"
+mysql_backup_fail_on_warn: false
 mysql_backup_gzip: no
 mysql_backup_encrypt_aes: no
 # key_src is just 256 bits of random: 'dd if=/dev/urandom of=aes256.key count=1 bs=32'

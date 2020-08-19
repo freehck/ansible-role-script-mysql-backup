@@ -15,6 +15,7 @@ VERSION=1.0
 : ${BKP_TSTAMP_FORMAT:="%F-%Hh%Mm%Ss"}
 
 : ${BKP_WARN_SIZE:=0}
+: ${BKP_FAIL_ON_WARN:=no}
 : ${BKP_GZIP:=no}
 : ${BKP_ENCRYPT_AES:=no}
 : ${BKP_ENCRYPT_AES_KEY:=""}
@@ -347,6 +348,9 @@ EOF
       msg fail
       msg "Size of backup is less than $BKP_WARN_SIZE MiB. Suspicious."
       slack "WARNING: Size of backup is less than $BKP_WARN_SIZE GiB. Suspicious.\nBackup name: $bkp"
+      if [ "$BKP_FAIL_ON_WARN" = "yes" ]; then
+	  exit 4
+      fi
   fi
 
   msg "Backup complete: $(date +%F-%T)"

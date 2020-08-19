@@ -12,6 +12,9 @@ export MYSQL_DB="{{ mysql_backup_db }}"
 export BKP_PREFIX="{{ mysql_backup_archive_prefix }}"
 export BKP_TSTAMP_FORMAT="{{ mysql_backup_archive_stamp }}"
 export BKP_WARN_SIZE="{{ mysql_backup_warn_size }}"
+{% if mysql_backup_fail_on_warn %}
+export BKP_FAIL_ON_WARN="yes"
+{% endif %}
 
 {% if mysql_backup_backend_use_s3 %}
 export S3_STORAGE="yes"
